@@ -63,12 +63,12 @@ fun ExpenseSummaryItem(label: String, value: String, color: Color, icon: ImageVe
 
 @Composable
 fun CategoryPieChartCard(categoryData: Map<CategoryEntity, Long>) {
-    fun nameToColor(name: String): Color {
-        val hash = name.hashCode()
-        return Color((0xFF shl 24) or (hash and 0xFFFFFF))
-    }
-    val pieChartData = categoryData.map {
-        PieChartData(it.key.name ?: "", it.value.toDouble() / 100.0, nameToColor(it.key.name ?: ""))
+    val pieChartData = categoryData.entries.mapIndexed { index, entry ->
+        PieChartData(
+            label = entry.key.name ?: "",
+            value = entry.value.toDouble() / 100.0,
+            color = vibrantColors[index % vibrantColors.size]
+        )
     }
     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
